@@ -10,7 +10,12 @@ import router from "./router";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+import { Offcanvas } from "bootstrap";
+
 const app = createApp(App);
+app.component("VueDatePicker", VueDatePicker);
 app.use(BootstrapVue3);
 app.use(router);
 

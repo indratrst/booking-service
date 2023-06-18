@@ -193,12 +193,15 @@
             <div class="col" v-for="(item, index) in cart" :key="index">
               <div class="card m-2 shadow-md" style="width: 18rem">
                 <div class="card-body">
-                  <p class="card-title">NO.{{ index + 1 }}</p>
+                  <p class="card-title d-flex justify-content-between">
+                    NO.{{ index + 1 }}
+                    <strong>Status : {{ item.status }}</strong>
+                  </p>
+                  <hr />
                   <h5 class="card-title">{{ item.name }}</h5>
                   <h6 class="card-subtitle mb-2 text-body-secondary">
                     {{ item.email }}
                   </h6>
-                  <strong>Status : {{ item.status }}</strong>
 
                   <p class="card-text">
                     <strong> Catatan Keluhan : </strong> <br />
