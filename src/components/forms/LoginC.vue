@@ -1,6 +1,6 @@
 <template>
   <div class="container" style="margin-top: 86px">
-    <b-card title="Login" style="max-width: 22rem" class="shadow-sm">
+    <b-card title="Login" style="max-width: 25rem" class="shadow-sm">
       <form @submit.prevent="login">
         <div class="form-group w-100">
           <label for="username" class="mt-3">Username:</label>
@@ -58,7 +58,7 @@ export default {
         .then((response) => {
           // Successful login
           alert("Logged in successfully!");
-          this.$router.push("/shop");
+          this.$router.push("/cart");
         })
         .catch((error) => {
           // Failed login

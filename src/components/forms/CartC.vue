@@ -1,22 +1,14 @@
 <template lang="">
   <div>
     <div class="container mt-5 mb-5">
-      <b-card title="Card Title" style="max-width: 30rem" class="mb-2">
+      <b-card title="Form Booking" style="max-width: 30rem" class="mb-2">
         <div class="row">
-          <div class="col d-flex">
+          <div class="col">
             <b-form-group id="name" label="Name">
               <b-form-input
                 v-model="formData.name"
                 required
-                trim
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group class="mx-2" label="Email">
-              <b-form-input
-                id="email"
-                v-model="formData.email"
-                required
+                placeholder="Name"
                 trim
               ></b-form-input>
             </b-form-group>
@@ -29,7 +21,17 @@
               <b-form-input
                 id="input-1"
                 v-model="formData.phone"
+                placeholder="No handphone"
                 type="tel"
+                trim
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group class="mx-2" label="Email">
+              <b-form-input
+                id="email"
+                v-model="formData.email"
+                placeholder="Email"
+                required
                 trim
               ></b-form-input>
             </b-form-group>
@@ -47,14 +49,16 @@
               <b-form-input
                 id="input-1"
                 v-model="formData.merk"
+                placeholder="Merk"
                 trim
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group id="platNomor" class="mx-2" label="platNomor">
+            <b-form-group id="platNomor" class="mx-2" label="Plat Nomor">
               <b-form-input
                 id="input-1"
                 v-model="formData.platNomor"
+                placeholder="Plat Nomor"
                 trim
               ></b-form-input>
             </b-form-group>
@@ -113,16 +117,7 @@
           </div>
         </div>
 
-        <!-- <div class="row">
-          <div class="col">
-            <b-form-select
-              v-model="selectedJasaService"
-              @change="updateTotalPrice"
-              :options="bookings[1].jasaServis"
-              required
-            ></b-form-select>
-          </div>
-        </div> -->
+        <label for="jasaService">List Service</label>
         <select
           id="jasaService"
           v-model="selectedJasaService"
@@ -131,27 +126,26 @@
           @change="updateTotalPrice"
           required
         >
-          <!-- <option selected>Select Jasa Service</option> -->
           <option
-            v-for="service in bookings[1].jasaServis"
+            v-for="service in bookings[0].jasaServis"
             :value="service"
             :key="service.nama"
           >
-            <!-- {{ service.nama }} ({{ calculateTotalPrice(service.harga) }}) -->
-            {{ service.nama }} {{ service.harga }}
+            {{ service.nama }} ( Harga : Rp{{ service.harga }} )
           </option>
         </select>
 
         <div class="row mt-2">
           <div class="col">
-            <b-card title="Card Title" style="max-width: 20rem" class="mb-2">
-              <b-form-group
-                label="Using options array:"
-                v-slot="{ ariaDescribedby }"
-              >
+            <b-card
+              title="Additional Services"
+              style="max-width: 20rem"
+              class="mb-2"
+            >
+              <b-form-group v-slot="{ ariaDescribedby }">
                 <div
                   class="form-check"
-                  v-for="service in bookings[2].additionalServices"
+                  v-for="service in bookings[1].additionalServices"
                   :key="service.additionalName"
                 >
                   <input
@@ -163,8 +157,8 @@
                     @change="updateTotalPrice"
                   />
                   <label class="form-check-label" :for="service.additionalName">
-                    {{ service.additionalName }} (Price:
-                    {{ service.additionalPrice }})
+                    {{ service.additionalName }} ( Harga :
+                    {{ service.additionalPrice }} )
                   </label>
                 </div>
               </b-form-group>
@@ -174,13 +168,6 @@
 
         <div class="form-group mb-3">
           <label for="totalPrice">Total Price</label>
-          <input
-            type="number"
-            id="totalPrice"
-            v-model="totalPrice"
-            class="form-control"
-            disabled
-          />
           Rp.{{ totalPrice }}
         </div>
 
@@ -191,31 +178,13 @@
     </div>
     <div class="container-xl">
       <div v-if="cart.length > 0">
-        <!-- <h4>Cart:</h4> -->
-        <!-- <div>
-            <b-navbar class="px-5" variant="light">
-              <b-navbar-brand class="" href="#">NavBar</b-navbar-brand>
-
-              <div>
-                <b-nav>
-                  <RouterLink class="nav-link">Login</RouterLink>
-                  <RouterLink class="btn btn-outline-dark">Cart</RouterLink>
-                </b-nav>
-              </div>
-            </b-navbar>
-          </div> -->
-        <!-- <b-form-input
-          v-model="searchQuery"
-          placeholder="Search..."
-          @input="handleSearch"
-        /> -->
         <b-navbar
-          class="justify-content-between"
+          class="justify-content-between mb-3"
           toggleable="lg"
           type="dark"
           variant="primary"
         >
-          <b-navbar-brand href="#">NavBar</b-navbar-brand>
+          <b-navbar-brand class="text-light px-2">Artikel</b-navbar-brand>
           <div class="">
             <b-collapse id="nav-collapse" is-nav>
               <!-- Right aligned nav items -->
@@ -228,9 +197,6 @@
                     placeholder="Search..."
                     @input="handleSearch"
                   ></b-form-input>
-                  <b-button size="sm" class="my-2 my-sm-0" type="submit"
-                    >Search</b-button
-                  >
                 </b-nav-form>
               </b-navbar-nav>
             </b-collapse>
@@ -250,7 +216,6 @@
                   NO.{{ index + 1 }}
                   <strong>Status : {{ item.status }}</strong>
                 </p>
-                <!-- <hr /> -->
               </div>
 
               <b-list-group>
@@ -274,7 +239,6 @@
                     v-if="item.reschedule && isSameRescheduled(item)"
                     class="card-text"
                   >
-                    <!-- <strong> Reschedule : </strong> <br /> -->
                     Booking Date :{{ item.bookingDate }}
                   </strong>
                   <strong
@@ -300,50 +264,7 @@
                 </b-list-group-item>
               </b-list-group>
 
-              <!-- <p class="card-text">
-                  <strong> Merk : </strong> <br />
-                  {{ item.merk }}
-                </p>
-
-                <p class="card-text">
-                  <strong> Plat No : </strong> <br />
-                  {{ item.platNomor }}
-                </p>
-                <p class="card-text">
-                  <strong> Km Terakhir : </strong> <br />
-                  {{ item.kmTerakhir }}
-                </p>
-
-                <p class="card-text">
-                  <strong> Catatan Keluhan : </strong> <br />
-                  {{ item.catatanKeluhan }}
-                </p> -->
-
-              <!-- <div class="container">
-                  <p
-                    v-if="item.reschedule && isSameRescheduled(item)"
-                    class="card-text"
-                  >
-                    Booking Date :{{ item.bookingDate }}
-                  </p>
-                  <p v-else-if="item.reschedule && !isSameRescheduled(item)">
-                    Booking Date: {{ item.bookingDate }}
-                    <br />
-                    Reschedule:
-                    {{ item.reschedule }}
-                  </p>
-                  <p v-else>Booking Date :{{ item.bookingDate }}</p>
-                </div> -->
-
-              <!-- <p class="card-text">
-                  <strong> Jasa Service : </strong>{{ item.jasaServis.nama }}
-                </p>
-                <strong><p>List additional :</p></strong>
-                <ul class="" v-for="i in item.additionalServices">
-                  <li class="">Additional : {{ i.additionalName }}</li>
-                </ul> -->
               <div class="card-body">
-                <!-- <hr /> -->
                 <div
                   class="d-flex justify-content-between align-items-baseline"
                 >
@@ -352,6 +273,9 @@
                     {{ item.email }}
                   </h6>
                 </div>
+                <h6 class="card-subtitle mb-2 text-body-secondary">
+                  {{ item.phone }}
+                </h6>
                 <p class="card-text mt-3">
                   <strong> Total Service : </strong>Rp.{{ item.totalPrice }}
                 </p>
@@ -409,11 +333,47 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="editEmail">catatanKeluhan:</label>
+                  <label for="editEmail">Phone</label>
+                  <input
+                    type="telp"
+                    class="form-control"
+                    id="phone"
+                    v-model="editingBooking.phone"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="editEmail">Merk</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="editEmail"
+                    id="merk"
+                    v-model="editingBooking.merk"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="platNomor">Plat Nomor</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="paltNomor"
+                    v-model="editingBooking.platNomor"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="editEmail">Km Terakhir</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="kmTerakhir"
+                    v-model="editingBooking.kmTerakhir"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="catatanKeluhan">Catatan Keluhan:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="catatanKeluhan"
                     v-model="editingBooking.catatanKeluhan"
                   />
                 </div>
@@ -432,7 +392,7 @@
                       <h5 class="card-title">Additional Services</h5>
                       <div
                         class="form-check"
-                        v-for="service in bookings[2].additionalServices"
+                        v-for="service in bookings[1].additionalServices"
                         :key="service.additionalName"
                       >
                         <input
@@ -447,13 +407,14 @@
                           class="form-check-label"
                           :for="service.additionalName"
                         >
-                          {{ service.additionalName }} (Price:
+                          {{ service.additionalName }} ( Harga :
                           {{ service.additionalPrice }})
                         </label>
                       </div>
                     </div>
                   </div>
                 </div>
+                <label class="mt-2" for="jasaService">List Service : </label>
                 <select
                   id="jasaService"
                   v-model="selectedJasaService"
@@ -461,13 +422,12 @@
                   @change="updateTotalPrice"
                   required
                 >
-                  <option selected>Select Jasa Service</option>
                   <option
-                    v-for="service in bookings[1].jasaServis"
+                    v-for="service in bookings[0].jasaServis"
                     :value="service"
                     :key="service.nama"
                   >
-                    {{ service.nama }} {{ service.harga }}
+                    {{ service.nama }} ( Harga :{{ service.harga }} )
                   </option>
                 </select>
 
@@ -489,7 +449,7 @@
                 class="btn btn-secondary"
                 @click="backBooking('Booked')"
               >
-                Close
+                Booked
               </button>
               <button
                 type="button"
@@ -527,27 +487,9 @@ export default {
     isRescheduled() {
       return this.editingBooking.reschedule !== null;
     },
-    scheduled() {
-      return this.editingBooking.reschedule === null;
-    },
-    state() {
-      return this.name.length >= 3;
-    },
-    invalidFeedback() {
-      if (this.name.length > 0) {
-        return "Enter at least 4 characters.";
-      }
-      return "Please enter something.";
-    },
-    stateEmail() {
-      return this.email.length >= 4;
-    },
-    invalidEmail() {
-      if (this.email.length > 0) {
-        return "Enter at least 4 characters.";
-      }
-      return "Please enter something.";
-    },
+    // nameState() {
+    //   return this.formData.name.length > 2 ? true : false;
+    // },
     filteredItems() {
       if (this.searchQuery) {
         return this.items.filter((item) =>
@@ -561,17 +503,6 @@ export default {
   data() {
     return {
       searchQuery: "",
-      // selected: null,
-      // options: [
-      //   { value: null, text: "Please select an option" },
-      //   { value: "a", text: "This is First option" },
-      //   { value: "b", text: "Selected Option" },
-      //   { value: { C: "3PO" }, text: "This is an option with object value" },
-      //   { value: "d", text: "This one is disabled", disabled: true },
-      // ],
-      // name: "",
-      // email: "",
-      // value: "",
       jasaServis: [
         {
           nama: "Ganti Oli",
@@ -590,21 +521,6 @@ export default {
         },
       ],
       bookings: [
-        {
-          Name: "",
-          Email: "",
-          Phone: "",
-          platNomor: "",
-          bookingDate: "",
-          merk: "",
-          totalPrice: 0,
-          kmTerakhir: 0,
-          catatanKeluhan: "",
-          additionalServices: [],
-          jasaServis: [],
-          status: "",
-        },
-
         {
           jasaServis: [
             {
@@ -706,9 +622,6 @@ export default {
         });
 
       this.cart.push(booking);
-
-      // this.cart.push({ ...this.formData, status: "Booked" });
-      // console.log(booking);
     },
     calculateTotalPrice(basePrice) {
       let totalPrice = basePrice;
@@ -735,16 +648,6 @@ export default {
     },
 
     editBooking(bookingId) {
-      // const booking = this.cart.find((booking) => booking.id === bookingId);
-      // console.log(booking);
-      // if (booking) {
-      //   const newName = prompt("Masukkan nama :");
-      //   const newType = prompt("Masukkan  email:");
-      //   if (newName && newType) {
-      //     booking.name = newName;
-      //     booking.email = newType;
-      //   }
-      // }
       const bookingIndex = this.cart.findIndex(
         (booking) => booking.id === bookingId
       );
@@ -769,6 +672,10 @@ export default {
           ...this.cart[this.editingIndex],
           name: this.editingBooking.name,
           email: this.editingBooking.email,
+          phone: this.editingBooking.phone,
+          merk: this.editingBooking.merk,
+          platNomor: this.editingBooking.platNomor,
+          kmTerakhir: this.editingBooking.kmTerakhir,
           catatanKeluhan: this.editingBooking.catatanKeluhan,
           additionalServices: this.selectedServices,
           jasaServis: this.selectedJasaService,
@@ -796,13 +703,6 @@ export default {
     },
     generateServiceId() {
       return Math.floor(Math.random() * 1000);
-    },
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, "0");
-      const day = date.getDate().toString().padStart(2, "0");
-      return `${year}-${month}-${day}`;
     },
     isSameRescheduled(item) {
       // console.log(this.bookingDate, this.reschedule);
